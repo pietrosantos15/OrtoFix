@@ -1,0 +1,6 @@
+Flask
+mysql-connector-python
+python-dotenv
+Flask-CORS
+google-generativeai # Esta linha PODE SAIR se o backend principal NÃO chamar o Gemini diretamente
+requests            # ADICIONAR ESTA LINHA

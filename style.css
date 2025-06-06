@@ -1,0 +1,5 @@
+body { font-family: Arial, sans-serif; background: #e7f0f7; }
+h1 { color: #222; }
+table { background: #cfe0ef; border-radius: 8px; padding: 16px; }
+select { margin: 4px; }
+#resultado { margin-top: 20px; font-weight: bold; }

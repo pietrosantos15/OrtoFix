@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Página do aluno{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>O que deseja acessar?</h1>
+            <button a href="/ortofix" class="btn btn-primary btn-sm me-2">OrtoFix</button>
+            <button a href="/typerun" class="btn btn-primary btn-sm me-2">TypeRun</button>
+            <button a href="/correcaodetexto" class="btn btn-primary btn-sm me-2">Correcao de texto</button>
+            <button a href="/paineldenotas" class="btn btn-primary btn-sm me-2">Painel de notas</button>
+            <button a href="/duvidapersonalizada" class="btn btn-primary btn-sm me-2">Duvida personalizada</button>
+            <button a href="/recompensas" class="btn btn-primary btn-sm me-2">Recompensas</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

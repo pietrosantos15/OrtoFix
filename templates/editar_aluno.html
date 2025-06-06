@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Ortofix - Editar Aluno{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1>Editar Aluno</h1>
+
+            {% if msg_erro %}
+                <div class="alert alert-danger" role="alert">
+                    {{ msg_erro }}
+                </div>
+            {% endif %}
+
+            <form action="/editaraluno/{{ aluno.idAluno }}" method="post" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="nomeAluno" class="form-label">Nome do Aluno</label>
+                    <input type="text" class="form-control" id="nomeAluno" name="nomeAluno" value="{{ aluno.nomeAluno }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cpfAluno" class="form-label">CPF</label>
+                    <input type="text" class="form-control" id="cpfAluno" name="cpfAluno" value="{{ aluno.cpfAluno }}" required maxlength="11" pattern="\d{11}">
+                </div>
+                <div class="mb-3">
+                    <label for="emailAluno" class="form-label">E-mail</label>
+                    <input type="email" class="form-control" id="emailAluno" name="emailAluno" value="{{ aluno.emailAluno }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="senhaAluno" class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="senhaAluno" name="senhaAluno" value="{{ aluno.senhaAluno }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="ativo" {% if aluno.status == 'ativo' %}selected{% endif %}>Ativo</option>
+                        <option value="inativo" {% if aluno.status == 'inativo' %}selected{% endif %}>Inativo</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Salvar alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+<script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js"></script>
+<script>
+    Inputmask("999.999.999-99").mask(document.getElementById("cpfAluno"));
+</script>
+
+{% endblock %}

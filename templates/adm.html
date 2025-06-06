@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}OrtoFix - Painel do Administrador{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Painel do Administrador</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <p><a href="/cadastrar_aluno" class="btn btn-success">Cadastrar aluno</a></p>
+            </div>
+        </div>
+    <h2>Alunos ativos:</h2>
+    <div class="row mt-4">
+        {% if alunos_ativos %}  
+            {% for alunos in alunos_ativos %}
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ aluno.nomeAluno }}</h5>
+                      <p class="card-text">
+                        <strong>CNPJ:</strong> {{ aluno.cpfAluno }}<br>
+                        <strong>E-mail:</strong> {{ aluno.emailAluno }}<br>
+                      </p>
+                      <a href="/editar_aluno/{{ aluno.idAluno }}" class="btn btn-primary btn-sm me-2">Editar</a>
+                      <a href="/status_aluno/{{ aluno.idAluno }}" class="btn btn-warning btn-sm" onclick="return confirm('Tem certeza que deseja inativar este aluno?')">Inativar</a>
+                    </div>
+                  </div>                  
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhum aluno ativo cadastrado.</p>
+        {% endif %}
+    </div>
+
+    <h2>Alunos inativos:</h2>
+    <div class="row mt-4">
+      {% if alunos_inativos %}
+          {% for alunos in alunos_inativos %}
+              <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ aluno.nomeAluno }}</h5>
+                    <p class="card-text">
+                      <strong>CPF:</strong> {{ aluno.cpfAluno }}<br>
+                      <strong>E-mail:</strong> {{ aluno.emaiAluno }}<br>
+                    </p>
+                    
+                    <a href="/editar_aluno/{{ aluno.idAluno }}" class="btn btn-primary btn-sm me-2">Editar</a>
+                    <a href="/status_aluno/{{ aluno.idAluno }}" class="btn btn-success btn-sm me-2">Ativar</a>
+                    <a href="/excluir_aluno/{{ aluno.idAluno }}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este aluno?')">Excluir</a>
+                  </div>
+                </div>
+              </div>
+          {% endfor %}
+      {% else %}
+          <p>Nenhuma aluno inativo cadastrado.</p>
+      {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}
