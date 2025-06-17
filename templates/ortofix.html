@@ -3,35 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>OrtoFix</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="static/style2.css">
 </head>
 <body>
     <h1>OrtoFix</h1>
     <p>Relacione cada palavra ao tipo de acento correto:</p>
-    <form id="form-ortofix">
+    <form method="POST" id="form-ortofix">
         <table>
             <tr>
                 <th>Palavra</th>
                 <th>Tipo de acento</th>
             </tr>
-            {% for item in palavras %}
+            {% for palavra in palavras %}
             <tr>
-                <td>{{ item.palavra }}</td>
                 <td>
-                    <select name="acento">
+                    {{ palavra }}
+                    <input type="hidden" name="palavra_{{ loop.index0 }}" value="{{ palavra }}">
+                </td>
+                <td>
+                    <select name="acento_{{ loop.index0 }}">
                         <option value="agudo">Agudo (´)</option>
                         <option value="circunflexo">Circunflexo (^)</option>
-                        <option value="grave">Til (~)</option>
+                        <option value="til">Til (~)</option>
                         <option value="sem acento">Sem acento</option>
                     </select>
                 </td>
             </tr>
             {% endfor %}
-            <div id="feedback">...</div>
         </table>
         <button type="submit">Verificar</button>
+        <button type="submit" name="acao" value="novas">Novas palavras</button>
     </form>
-    <div id="resultado"></div>
-    <script src="../static/script.js"></script>
+
+    {% if feedback %}
+    <hr>
+    <div id="feedback">
+        <h2>Feedback da IA:</h2>
+        <pre>{{ feedback }}</pre>
+    </div>
+    {% endif %}
 </body>
 </html>

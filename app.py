@@ -8,15 +8,256 @@ import os
 from dotenv import load_dotenv
 import json
 import requests
+import random
 
 
-acentoagudo = ["heróis, anéis, edifício, lápide, papéis, sóis, áreas, médios, néctar, memória, pérgola, régias, mágicos, frágeis, cálcio, júri, fértil, pólis, pálido, lúdico, fé, séries, fábula, sérios, mídias, príncipe, colégio, réu, pódio, álbum, ícones, médicas, nível, júbilo, régua, químico, crédito, código, série, síntese, vitória, prédio, místico, séquito, século, cárie, plágio"]
+acento_correto = {
+    # Agudo
+    "eletrico": "agudo",
+    "herois": "agudo",
+    "aneis": "agudo",
+    "lapide": "agudo",
+    "papeis": "agudo",
+    "sois": "agudo",
+    "areas": "agudo",
+    "medios": "agudo",
+    "nectar": "agudo",
+    "memoria": "agudo",
+    "pergola": "agudo",
+    "regias": "agudo",
+    "magicos": "agudo",
+    "frageis": "agudo",
+    "calcio": "agudo",
+    "juri": "agudo",
+    "fertil": "agudo",
+    "polis": "agudo",
+    "palido": "agudo",
+    "ludico": "agudo",
+    "fe": "agudo",
+    "series": "agudo",
+    "fabula": "agudo",
+    "serios": "agudo",
+    "midias": "agudo",
+    "principe": "agudo",
+    "colegio": "agudo",
+    "reu": "agudo",
+    "podio": "agudo",
+    "album": "agudo",
+    "icones": "agudo",
+    "medicas": "agudo",
+    "nivel": "agudo",
+    "jubilo": "agudo",
+    "regua": "agudo",
+    "credito": "agudo",
+    "serie": "agudo",
+    "sintese": "agudo",
+    "vitoria": "agudo",
+    "predio": "agudo",
+    "sequito": "agudo",
+    "seculo": "agudo",
+    "carie": "agudo",
+    "plagio": "agudo",
+    "pesames": "agudo",
+    # Circunflexo
+    "edificio": "agudo",
+    "quimico": "agudo",
+    "codigo": "agudo",
+    "mistico": "agudo",
+    "cafe": "agudo",
+    "sofa": "agudo",
+    "arvore": "agudo",
+    "lapis": "agudo",
+    "eletrons": "agudo",
+    "relogio": "agudo",
+    "exercito": "agudo",
+    "genio": "agudo",
+    "cupulas": "agudo",
+    "epoca": "agudo",
+    "sabado": "agudo",
+    "perimetro": "agudo",
+    "apice": "agudo",
+    "latex": "agudo",
+    "torax": "agudo",
+    "cortex": "agudo",
+    "vortex": "agudo",
+    "circulo": "agudo",
+    "taxis": "agudo",
+    "juiz": "agudo",
+    "bari": "agudo",
+    "cerebro": "agudo",
+    "exito": "circunflexo",
+    "exodo": "circunflexo",
+    "onus": "circunflexo",
+    "angulo": "circunflexo",
+    "fenix": "circunflexo",
+    "fenomeno": "circunflexo",
+    "tremulo": "circunflexo",
+    "bebado": "circunflexo",
+    "orgao": "circunflexo",
+    "cromico": "circunflexo",
+    "vovo": "circunflexo",
+    "torax": "circunflexo",
+    "tibio": "circunflexo",
+    "obvio": "circunflexo",
+    "subito": "circunflexo",
+    "tenue": "circunflexo",
+    "traves": "circunflexo",
+    "custodio": "circunflexo",
+    "comodo": "circunflexo",
+    "omega": "circunflexo",
+    "genese": "circunflexo",
+    "lemures": "circunflexo",
+    "poneis": "circunflexo",
+    "bebados": "circunflexo",
+    "semen": "circunflexo",
+    "concavo": "circunflexo",
+    "onix": "circunflexo",
+    "ambar": "circunflexo",
+    "comico": "circunflexo",
+    "bonus": "circunflexo",
+    "pendulos": "circunflexo",
+    "computo": "circunflexo",
+    "volei": "circunflexo",
+    "tempora": "circunflexo",
+    "textil": "circunflexo",
+    "fenix": "circunflexo",
+    "canhamo": "circunflexo",
+    "pensil": "circunflexo",
+    "angulo": "circunflexo",
+    "fenomeno": "circunflexo",
+    "gemeo": "circunflexo",
+    "exodo": "circunflexo",
+    "onus": "circunflexo",
+    "folego": "circunflexo",
+    "candido": "circunflexo",
+    # Til
+    "mamoes": "til",
+    "limoes": "til",
+    "feijoes": "til",
+    "botoes": "til",
+    "leoes": "til",
+    "avioes": "til",
+    "baloes": "til",
+    "portao": "til",
+    "irmao": "til",
+    "tubarao": "til",
+    "fogoes": "til",
+    "peoes": "til",
+    "coracoes": "til",
+    "ladrao": "til",
+    "violao": "til",
+    "botao": "til",
+    "dragao": "til",
+    "alemao": "til",
+    "sabao": "til",
+    "galao": "til",
+    "bençao": "til",
+    "paes": "til",
+    "nao": "til",
+    "alçapao": "til",
+    "corujao": "til",
+    "campeao": "til",
+    "arranhao": "til",
+    "quinhao": "til",
+    "trovao": "til",
+    "trovoes": "til",
+    "caixao": "til",
+    "leaozinho": "til",
+    "anciao": "til",
+    "charlatao": "til",
+    "caozinho": "til",
+    "camarao": "til",
+    "pavao": "til",
+    "pao": "til",
+    "mao": "til",
+    "chao": "til",
+    "grao": "til",
+    "sabao": "til",
+    "timao": "til",
+    "simao": "til",
+    "talao": "til",
+    "torao": "til",
+    "corao": "til",
+    "mamao": "til",
+    "furao": "til",
+    "tubarao": "til",
+    # Sem acento
+    "porta": "sem acento",
+    "cadeira": "sem acento",
+    "mochila": "sem acento",
+    "sapato": "sem acento",
+    "vaso": "sem acento",
+    "planta": "sem acento",
+    "tigela": "sem acento",
+    "animal": "sem acento",
+    "rua": "sem acento",
+    "pedra": "sem acento",
+    "livro": "sem acento",
+    "tela": "sem acento",
+    "sino": "sem acento",
+    "mesa": "sem acento",
+    "papel": "sem acento",
+    "caneta": "sem acento",
+    "garfo": "sem acento",
+    "faca": "sem acento",
+    "prato": "sem acento",
+    "colher": "sem acento",
+    "panela": "sem acento",
+    "copo": "sem acento",
+    "balde": "sem acento",
+    "carro": "sem acento",
+    "disco": "sem acento",
+    "violino": "sem acento",
+    "gato": "sem acento",
+    "cachorro": "sem acento",
+    "terra": "sem acento",
+    "fogo": "sem acento",
+    "gelo": "sem acento",
+    "neve": "sem acento",
+    "areia": "sem acento",
+    "rocha": "sem acento",
+    "caverna": "sem acento",
+    "gruta": "sem acento",
+    "poco": "sem acento",
+    "fonte": "sem acento",
+    "trilha": "sem acento",
+    "ponte": "sem acento",
+    "estrada": "sem acento",
+    "cidade": "sem acento",
+    "vila": "sem acento",
+    "bairro": "sem acento",
+    "parque": "sem acento",
+    "mercado": "sem acento",
+    "loja": "sem acento",
+    "hospital": "sem acento",
+    "igreja": "sem acento",
+    "templo": "sem acento",
+    "casa": "sem acento",
+    "barraca": "sem acento",
+    "cabana": "sem acento",
+    "castelo": "sem acento",
+    "povo": "sem acento",
+    "sombra": "sem acento",
+    "segredo": "sem acento",
+    "perfume": "sem acento",
+    "retrato": "sem acento",
+    "farol": "sem acento",
+    "barco": "sem acento",
+    "aldeia": "sem acento",
+    "barragem": "sem acento",
+    "moinho": "sem acento",
+    "geleira": "sem acento",
+    "estreito": "sem acento",
+    "cacto": "sem acento",
+    "trilho": "sem acento",
+    "lenha": "sem acento",
+    "capim": "sem acento",
+    "bambu": "sem acento",
+    "trevo": "sem acento",
+    "bosque": "sem acento",
+}
 
-acentocircunflexo = ["pêsames, cômodo, ômega, gênese, lêmures, cúpulas, mênstruos, elétrons, pôneis, bêbados, sêmen, âmago, côncavo, ônix, âmbar, cômico, bônus, pêndulos, êxitos, cômputo, vôlei, têmpora, têxtil, fênix, elétrico, cânhamo, pênsil, êxito, ângulo, fenômeno, gêmeo, êxodo, ônus, fôlego, cúpula, exército, cândido, sólido, lícito, vácuo"]
 
-acentotil = ["mamões, limões, feijões, botões, leões, aviões, balões, portão, irmão, tubarão, fogões, peões, corações, ladrão, violão, botão, dragão, alemão, sabão, galão, bênção, pães, não, alçapão, corujão, campeão, arranhão, quinhão, trovão, trovões, caixão, leãozinho, ancião, charlatão, cãozinho"]
-
-semacento = ["porta, cadeira, mochila, sapato, vaso, planta, tigela, animal, rua, pedra, livro, tela, sino, mesa, papel, caneta, garfo, faca, prato, colher, panela, copo, balde, carro, disco, violino, gato, cachorro, rato, urso, peixe, sol, lua, estrela, planeta, mar, rio, lago, montanha, floresta, chuva, vento, tempestade, nuvem, terra, fogo, gelo, neve, areia, rocha, caverna, gruta, poço, fonte, trilha, ponte, estrada, cidade, vila, bairro, parque, mercado, loja, hospital, igreja, templo, casa, barraca, cabana, castelo, povo, sombra, segredo, perfume, retrato, farol, barco, aldeia, barragem, moinho, geleira, estreito, cacto, trilho, lenha, capim, bambu, trevo, toco, tronco, galho, folha, florada, sementeira, regato, charco, pasto, sitio, curral, colina, encosta, baixada, bosque, mato, selva, savana, manguezal, brejo, abismo, penhasco, escarpa,  vertente, cascata, cachoeira, corredeira, delta, duna, lagoa, enseada, fiorde, ilhota, atalho, picada, vereda, esplanada, pomar, vinhedo, plantio, lavoura, rocado,  milharal,  jabuti, lambari, surubim, cascudo, pacu"]
 
 load_dotenv()
 
@@ -272,9 +513,45 @@ def feedbackaluno():
 
 @app.route("/ortofix", methods=["GET", "POST"])
 def ortofix():
-    palavras = feedbackaluno()
-    return render_template('ortofix.html', palavras=palavras)
+    todas_palavras = list(acento_correto.keys())
+    feedback = None
+    if request.method == "GET":
+        palavras = random.sample(todas_palavras, 4)
+        return render_template('ortofix.html', palavras=palavras, feedback=feedback)
 
-
+    acao = request.form.get("acao")
+    if acao == "novas":
+        palavras = random.sample(todas_palavras, 4)
+        feedback = None
+        return render_template('ortofix.html', palavras=palavras, feedback=feedback)
+    else:
+        palavras = []
+        for i in range(4):
+            palavra = request.form.get(f'palavra_{i}')
+            if palavra:
+                palavras.append(palavra)
+        
+        respostas_usuario = []
+        for i, palavra in enumerate(palavras):
+            resposta = request.form.get(f"acento_{i}")
+            respostas_usuario.append({
+                "palavra": palavra,
+                "resposta_usuario": resposta,
+                "acento_correto": acento_correto[palavra]
+            })
+        prompt = """Você é um assistente de ortografia.
+        Para cada palavra abaixo, forneça o feedback seguindo exatamente esta estrutura, sem adicionar comentários ou exemplos extras:
+        - Palavra: [palavra]
+        - Sua resposta: [resposta do aluno]
+        - Resposta correta: [resposta correta]
+        - Resultado: [Correto! ou Incorreto.]
+        - Explicação: [Explique de forma breve e educativa a regra de acentuação ou o motivo da resposta estar correta ou incorreta.]"""
+        for item in respostas_usuario:
+            prompt += f"Palavra: {item['palavra']} | Resposta do aluno: {item['resposta_usuario']} | Resposta correta: {item['acento_correto']}\n"
+        import google.generativeai as genai
+        model = genai.GenerativeModel("gemini-1.5-flash") 
+        response = model.generate_content(prompt)
+        feedback = response.text
+        return render_template('ortofix.html', palavras=palavras, feedback=feedback)
 if __name__=='__main__':
     app.run(debug=True)
